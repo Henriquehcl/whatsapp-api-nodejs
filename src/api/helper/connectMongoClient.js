@@ -1,3 +1,10 @@
+/**
+ * connectToCluster function - Establishes a connection to a MongoDB cluster using the provided URI.
+ * Função connectToCluster - Estabelece uma conexão com um cluster MongoDB usando o URI fornecido.
+ * 
+ * @param {string} uri - The MongoDB URI to connect to the cluster
+ * @returns {MongoClient | undefined} - Returns a MongoClient instance if connection is successful, otherwise undefined
+ */
 const { MongoClient } = require('mongodb')
 const logger = require('pino')()
 

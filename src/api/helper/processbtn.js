@@ -1,3 +1,7 @@
+/**
+ * Função para processar os botões e prepará-los para serem enviados.
+ * Function to process buttons and prepare them for sending.
+ */
 module.exports = function processButton(buttons) {
     const preparedButtons = []
 
@@ -29,3 +33,4 @@ module.exports = function processButton(buttons) {
     })
     return preparedButtons
 }
+

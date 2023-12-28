@@ -1,3 +1,7 @@
+/**
+ * useMongoDBAuthState function - Handles authentication state using MongoDB.
+ * Função useMongoDBAuthState - Manipula o estado de autenticação usando o MongoDB.
+ */
 const { proto } = require('@whiskeysockets/baileys/WAProto')
 const {
     Curve,
@@ -8,6 +12,10 @@ const {
 } = require('@whiskeysockets/baileys/lib/Utils/generics')
 const { randomBytes } = require('crypto')
 
+/**
+ * initAuthCreds function - Initializes authentication credentials.
+ * Função initAuthCreds - Inicializa as credenciais de autenticação.
+ */
 const initAuthCreds = () => {
     const identityKey = Curve.generateKeyPair()
     return {
@@ -25,7 +33,15 @@ const initAuthCreds = () => {
     }
 }
 
+/**
+ * BufferJSON object - Handles Buffer to JSON conversions.
+ * Objeto BufferJSON - Manipula as conversões de Buffer para JSON.
+ */
 const BufferJSON = {
+    /**
+     * replacer function - Replaces Buffer-like objects with base64 encoded strings.
+     * Função replacer - Substitui objetos semelhantes a Buffer por strings codificadas em base64.
+     */
     replacer: (k, value) => {
         if (
             Buffer.isBuffer(value) ||
@@ -41,6 +57,10 @@ const BufferJSON = {
         return value
     },
 
+    /**
+     * reviver function - Reverts base64 encoded strings to Buffer-like objects.
+     * Função reviver - Reverte strings codificadas em base64 para objetos semelhantes a Buffer.
+     */
     reviver: (_, value) => {
         if (
             typeof value === 'object' &&
@@ -57,7 +77,15 @@ const BufferJSON = {
     },
 }
 
+/**
+ * useMongoDBAuthState function - Handles authentication state using MongoDB.
+ * Função useMongoDBAuthState - Manipula o estado de autenticação usando o MongoDB.
+ */
 module.exports = useMongoDBAuthState = async (collection) => {
+    /**
+     * writeData function - Writes data to the MongoDB collection.
+     * Função writeData - Escreve dados na coleção do MongoDB.
+     */
     const writeData = (data, id) => {
         return collection.replaceOne(
             { _id: id },
@@ -65,6 +93,11 @@ module.exports = useMongoDBAuthState = async (collection) => {
             { upsert: true }
         )
     }
+
+    /**
+     * readData function - Reads data from the MongoDB collection.
+     * Função readData - Lê dados da coleção do MongoDB.
+     */
     const readData = async (id) => {
         try {
             const data = JSON.stringify(await collection.findOne({ _id: id }))
@@ -73,12 +106,19 @@ module.exports = useMongoDBAuthState = async (collection) => {
             return null
         }
     }
+
+    /**
+     * removeData function - Removes data from the MongoDB collection.
+     * Função removeData - Remove dados da coleção do MongoDB.
+     */
     const removeData = async (id) => {
         try {
             await collection.deleteOne({ _id: id })
         } catch (_a) {}
     }
+
     const creds = (await readData('creds')) || (0, initAuthCreds)()
+
     return {
         state: {
             creds,
